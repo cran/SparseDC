@@ -1,0 +1,250 @@
+---
+title: "Sparse Differential Clustering"
+author: "Martin Barron"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+---
+references:
+- id: biase2014
+  title: Cell fate inclination within 2-cell and 4-cell mouse embryos revealed by single-cell RNA sequencing
+  author:
+  - family: Biase
+    given: Fernando H.
+  - family: Cao
+    given: Xiaoyi
+  - family: Zhong
+    given: Sheng
+  container-title: Genome Research
+  volume: 11
+  URL: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4216920/'
+  DOI: 10.1101/gr.177725.114
+  issue: 4
+  publisher: Genome Research
+  page: 1787-1796
+  type: article-journal
+  issued:
+    year: 2014
+    month: 11
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+```
+The SparseDC package implements the sparse differential clustering algorithm
+described in "A sparse differential clustering algorithm for tracing cell type
+changes via single-cell RNA-Sequencing data". This algorithm clusters samples 
+(cells) from two conditions (identifying cell types), links the clusters across
+conditions and identifies variables (genes) which are markers for these
+changes.This vignette will guide you through the steps neccessary to apply the
+algorithm to your data.
+
+## Section 1 - Preliminaries 
+SparseDC takes as input data which is drawn from two conditions, for single-cell
+RNA-Sequencing (scRNA-seq) data, an example would be cells from populations before
+and after treatment. SparseDC assumes the data have been properly normalized
+beforehand.
+
+The first step in the analysis is to load the sparseDC package:
+```{r}
+library(SparseDC)
+set.seed(10)
+```
+
+
+### Real Data Example - Biase Data
+For this vignette we will use the scRNA-seq data created by Biase
+et al. to study cell fate inclination in mouse embryos [@biase2014] . This dataset contains 
+gene expression, FPKM, measurements for 49 cells and 16,514 genes. The cells in
+the dataset come from three different cell types, zygote, two-cell embryos and
+four-cell embryos. While the cells in this dataset are all from a single
+condition we have dveloped an approach to split the data into two conditions so
+that we can test the linking of clusters across conditions where we know the 
+absolute truth about which clusters are present in each condition (please see
+the original manuscript for more details). For this dataset we put the zygote
+cells and half of the two-cell cells into condition 1 and the remaining
+two-cell cells and the four-cell cells are put into condition 2.
+
+### Splitting the data 
+
+We first view the top of the dataset to ensure it is in the correct format. Here the genes are rows and the columns are cells as desired. 
+```{r}
+data(data_biase)
+head(data_biase[,1:5])
+```
+We then store the gene names for the data:
+```{r}
+gene_names_biase <- row.names(data_biase)
+```
+
+
+We next examine the cell types of the cells present in the data: 
+```{r}
+summary(as.factor(cell_type_biase))
+```
+
+With all the cell types as expected we then view the number of cells in each condition: 
+```{r}
+summary(as.factor(condition_biase))
+```
+
+The next step is to split the data into their respective conditions:
+```{r}
+data_A <- data_biase[ , which(condition_biase == "A")]
+data_B <- data_biase[ , which(condition_biase == "B")]
+```
+Then check that the dimensions are correct for each of the datasets:
+```{r}
+dim(data_A)
+dim(data_B)
+```
+And check they are in the correct format:
+```{r}
+head(data_A[ ,1:5])
+```
+
+```{r}
+head(data_B[ ,1:5])
+```
+As the dimension and format of these datasets are correct we can procede to pre-processing the data and estimating the parameters for using SparseDC. 
+
+###
+## Section 2 - Pre-processing the data
+
+SparseDC requires that data be normalized for sequencing depth and centered
+prior to running SparseDC. We also recommend that the data is log-transformed.
+To do this we have included a function that can easily pre-process the data.
+For the normalization it is recommended that users make use of one of the 
+many methods that exist for normalizing scRNA-Seq data. 
+The centering of the data is crucially important to the function of SparseDC
+and is vital to accurately clustering the data and identifying marker genes. 
+We recommend that all users use this function to center their data and that only 
+experienced users set "center=FALSE".
+
+The biase data are FPKM measurements of gene expression and so have been 
+normalized using an alternate method as advised. This means we can set 
+"norm = FALSE". The biase data then needs to be both log transformed and
+centered so we can set "log =TRUE"" and "center = TRUE":
+```{r}
+pre_data <- pre_proc_data(data_A, data_B, norm = FALSE, log = TRUE, center = TRUE)
+```
+The pre-processing function outputs the two processed datasets as a list so to extract the data we can run:
+```{r}
+pdata_A <- pre_data[[1]]
+pdata_B <- pre_data[[2]]
+```
+And view the processed data:
+```{r}
+head(pdata_A[,1:5])
+```
+```{r}
+head(pdata_B[,1:5])
+```
+Finally let us check the centering was succesful by examing the rowsums of the
+pooled data:
+```{r}
+summary(rowSums(cbind(pdata_A,pdata_B)))
+```
+As these values are all close to zero we can see that the centering has been 
+successful and we are now ready to move on to eatimating the parameters. 
+
+## Section 2 - Estimating the parameters
+
+There are two parameters to be calculated when using SparseDC, $\lambda_{1}$ and $\lambda_{2}$, which control the level of sparsity of the marker genes for each cluster and the level of difference in marker genes for each cluster across the conditions. The estimation of these parameters is described in the original manuscript. 
+
+
+### Estimating $\lambda_{1}$
+
+To estimate $\lambda_{1}$ all that needs to be provided is the total number of clusters present in the data and two pre-processed centered datasets. For the Biase data there are three clusters present in the dataset so we set 'n_cluster' equal to three.
+```{r}
+lambda1_value <- lambda1_calculator(pdata_A, pdata_B, ncluster = 3)
+lambda1_value
+```
+
+### Estimating $\lambda_{2}$
+
+To estimate $\lambda_{2}$ we again input the centered data from the two conditions and the number of clusters in the data. 
+```{r}
+lambda2_value <- lambda2_calculator(pdata_A, pdata_B, ncluster =3)
+lambda2_value
+```
+With the $\lambda_{1}$ and $\lambda_{2}$ parameters calculated it is now time to run the SparseDC algorithm.
+
+## Section 3 - Running SparseDC
+
+The SparseDC function requires us to input the pre-processed centered data sets, the number of clusters and the previously calculated $\lambda_{1}$ and $\lambda_{2}$ values:
+```{r}
+sdc_res <- sparsedc_cluster(pdata_A, pdata_B, ncluster = 3, 
+                              lambda1 = lambda1_value, lambda2 = lambda2_value)
+```
+
+### Viewing Results
+
+The results of SparseDC are stored as a list containing the clustering results for each condition, the cluster centers for each condition, and the scores for each of the iterations. These can be accessed by:
+```{r}
+
+clusters_1 <- sdc_res$clusters1  # Clusters for condition 1 data
+clusters_2 <- sdc_res$clusters2  # Clusters for condition 2 data
+centers_1 <- sdc_res$centers1  # Centers for condition 1 data
+centers_2 <- sdc_res$centers2  # Centers for condition 2 data
+```
+The results can then be seen as:
+```{r}
+summary(as.factor(clusters_1))
+```
+```{r}
+summary(as.factor(clusters_2))
+```
+
+
+We can then visualize the accuracy of the clustering by comparing the clusters to the true cell types:
+```{r}
+table(cell_type_biase[which(condition_biase == "A")], clusters_1)
+```
+```{r}
+table(cell_type_biase[which(condition_biase == "B")], clusters_2)
+```
+```{r}
+table(c(cell_type_biase),c(clusters_1,clusters_2))
+```
+
+Here see that each of the cells was clustered to the correct cell type, with the zygote cells making up cluster 1, the two-cell cells making up cluster 2 and the four-cell cells making up cluster 3. 
+
+### Marker Genes
+The marker gene results are stored as the centers with column 1 corresponding to the marker gene results for cluster 1 and so on. Any center value not equal to zero is a marker gene for the cluster, while center values equal to zero indicate null genes. Gene with a positive center value are up-regualted for the cluster while genes with a negative center value are down-regulated for the cluster. 
+To view the top-10 up-regulated marker genes for the zygote cell type we can run:
+```{r}
+zygote_top_10_index <- which(centers_1[,1] >= tail(sort(centers_1[,1]),10)[1])
+zygote_top_10 <- gene_names_biase[zygote_top_10_index]
+zygote_top_10
+```
+To view the center values for each of the top-10 genes we can run:
+```{r}
+zyg_t10_res <- cbind(zygote_top_10, centers_1[zygote_top_10_index])
+zyg_t10_res
+```
+
+### Condition-Specific and Condition-Dependent Marker Genes
+
+To detect condition-specific and condition-dependent marker genes (as defined
+in the original manuscript) we must examine the differences between the centers
+for clusters which are present in both conditions. As only the two-cell cells are present in each condition we examine their marker genes for condition specific and condition dependent marker genes. 
+
+As the two-cell cells were clustered in cluster 2 we compare the two-center
+vectors for cluster 2 to identify condition-specific and condition-dependent
+marker genes:
+```{r}
+diff_gene_index_2cell <- which(centers_1[,2] != centers_2[,2])
+diff_gene_index_2cell
+```
+
+However, for this dataset as the cells in both conditions are the same
+SparseDC correctly did not detect any genes as condtion-specific or 
+condition-dependent.
+
+### References
+
