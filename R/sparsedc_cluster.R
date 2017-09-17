@@ -1,4 +1,4 @@
-#' Sparse Differential Clustering.
+#' Sparse Differential Clustering
 #'
 #' The main SparseDC function. This function clustered the samples from the two
 #' conditions and links the clusters across the conditions. It also identifies
@@ -84,7 +84,6 @@ sparsedc_cluster <- function(pdat1, pdat2, ncluster, lambda1, lambda2,
   iter_star <- NA
   score_vec <- rep(NA, nstarts)  # Create vector to contain scores for each of the starts
   for( s in 1:nstarts) {  # For each start
-    set.seed(s)
     clusterHistory1 <- clusterHistory2 <- vector(nitter, mode="list")  # Create cluster assignment history list
     centerHistory1 <- centerHistory2 <- vector(nitter, mode="list")  # Create center history list
     c_dat <- cbind(pdat1, pdat2)

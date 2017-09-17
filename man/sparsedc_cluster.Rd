@@ -2,7 +2,7 @@
 % Please edit documentation in R/sparsedc_cluster.R
 \name{sparsedc_cluster}
 \alias{sparsedc_cluster}
-\title{Sparse Differential Clustering.}
+\title{Sparse Differential Clustering}
 \usage{
 sparsedc_cluster(pdat1, pdat2, ncluster, lambda1, lambda2, nitter = 20,
   nstarts = 50)

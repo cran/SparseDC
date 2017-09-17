@@ -2,7 +2,7 @@
 % Please edit documentation in R/update_mu.R
 \name{update_mu}
 \alias{update_mu}
-\title{Update the Center Values.}
+\title{Update the Center Values}
 \usage{
 update_mu(C_1, C_2, pdat1, pdat2, ncluster, lambda1, lambda2)
 }

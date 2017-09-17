@@ -1,4 +1,4 @@
-#'Update the Center Values.
+#'Update the Center Values
 #'
 #' This fucntion updates the center values for each cluster for each iteration
 #' of SparseDC. This function runs inside \code{sparse_dc_fun}

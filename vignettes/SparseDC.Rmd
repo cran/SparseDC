@@ -4,7 +4,7 @@ author: "Martin Barron"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteIndexEntry{sparseDC}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -30,6 +30,26 @@ references:
   issued:
     year: 2014
     month: 11
+    
+- id: tibs2001
+  title: Estimating the number of clusters in a data set via the gap statistic
+  author:
+  - family: Tibshirani
+    given: Robert
+  - family: Walther
+    given: Guenther
+  - family: Hastie
+    given: Trevor
+  container-title: 'Journal of the Royal Statistical Society: Series B (Statistical          Methodology)'
+  volume: 63
+  DOI: 10.1111/1467-9868.00293
+  issue: 2
+  publisher: Blackwell Publishers Ltd.
+  page: 411-423
+  type: article-journal
+  issued:
+    year: 2001    
+
 ---
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -58,7 +78,7 @@ set.seed(10)
 
 ### Real Data Example - Biase Data
 For this vignette we will use the scRNA-seq data created by Biase
-et al. to study cell fate inclination in mouse embryos [@biase2014] . This dataset contains 
+et al. to study cell fate inclination in mouse embryos [@biase2014]. This dataset contains 
 gene expression, FPKM, measurements for 49 cells and 16,514 genes. The cells in
 the dataset come from three different cell types, zygote, two-cell embryos and
 four-cell embryos. While the cells in this dataset are all from a single
@@ -245,6 +265,35 @@ diff_gene_index_2cell
 However, for this dataset as the cells in both conditions are the same
 SparseDC correctly did not detect any genes as condtion-specific or 
 condition-dependent.
+
+
+### Estimating the Number of Clusters in the Data via the Gap Statistic
+
+One of the more succesful methods for estimating the number of clusters
+present in supervised clustering analysis is the gap statistic [@tibs2001].
+To aid users who may not know the number of clusters in their data prior to 
+analysis we have included an implementation of the gap statistic for SparseDC
+in the R-package. Please see the original paper for full details on the 
+method. 
+
+Users should beware that the gap statistic function can take some time to
+run especially if using a large cluster range, a high number of bootstrap 
+samples or a high dimensional dataset. Please uncomment the code below if
+you would like to run it. Here "min_clus" is the minimum number of clusters
+to try while "max_clus" is the maximum. "nboots" controls the number of 
+bootstrap samples used, with a default value of 200. 
+
+```{r}
+#gap_stat <- sparsedc_gap(pdata_A, pdata_B,
+#                                 min_clus = 2, max_clus=4,
+#                                 nboots = 200, nitter = 20, nstarts = 10)
+#plot(gap_stat$gap_stat, xlab = "Cluster Number", ylab = "Gap Statistic",
+#     main = "Gap Statistic Plot")
+#arrows(1:length(gap_stat$gap_stat),gap_stat$gap_stat-gap_stat$gap_se,
+#       1:length(gap_stat$gap_stat),gap_stat$gap_stat+gap_stat$gap_se, 
+#       code=3, length=0.02, angle = 90)
+```
+
 
 ### References
 

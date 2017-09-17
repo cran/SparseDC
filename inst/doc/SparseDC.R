@@ -96,3 +96,13 @@ zyg_t10_res
 diff_gene_index_2cell <- which(centers_1[,2] != centers_2[,2])
 diff_gene_index_2cell
 
+## ------------------------------------------------------------------------
+#gap_stat <- sparsedc_gap(pdata_A, pdata_B,
+#                                 min_clus = 2, max_clus=4,
+#                                 nboots = 200, nitter = 20, nstarts = 10)
+#plot(gap_stat$gap_stat, xlab = "Cluster Number", ylab = "Gap Statistic",
+#     main = "Gap Statistic Plot")
+#arrows(1:length(gap_stat$gap_stat),gap_stat$gap_stat-gap_stat$gap_se,
+#       1:length(gap_stat$gap_stat),gap_stat$gap_stat+gap_stat$gap_se, 
+#       code=3, length=0.02, angle = 90)
+

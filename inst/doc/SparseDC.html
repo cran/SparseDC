@@ -12,7 +12,7 @@
 
 <meta name="author" content="Martin Barron" />
 
-<meta name="date" content="2017-05-02" />
+<meta name="date" content="2017-09-17" />
 
 <title>Sparse Differential Clustering</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Sparse Differential Clustering</h1>
 <h4 class="author"><em>Martin Barron</em></h4>
-<h4 class="date"><em>2017-05-02</em></h4>
+<h4 class="date"><em>2017-09-17</em></h4>
 
 
 
@@ -83,7 +83,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <span class="kw">set.seed</span>(<span class="dv">10</span>)</code></pre></div>
 <div id="real-data-example---biase-data" class="section level3">
 <h3>Real Data Example - Biase Data</h3>
-<p>For this vignette we will use the scRNA-seq data created by Biase et al. to study cell fate inclination in mouse embryos <span class="citation">(Biase, Cao, and Zhong 2014)</span> . This dataset contains gene expression, FPKM, measurements for 49 cells and 16,514 genes. The cells in the dataset come from three different cell types, zygote, two-cell embryos and four-cell embryos. While the cells in this dataset are all from a single condition we have dveloped an approach to split the data into two conditions so that we can test the linking of clusters across conditions where we know the absolute truth about which clusters are present in each condition (please see the original manuscript for more details). For this dataset we put the zygote cells and half of the two-cell cells into condition 1 and the remaining two-cell cells and the four-cell cells are put into condition 2.</p>
+<p>For this vignette we will use the scRNA-seq data created by Biase et al. to study cell fate inclination in mouse embryos <span class="citation">(Biase, Cao, and Zhong 2014)</span>. This dataset contains gene expression, FPKM, measurements for 49 cells and 16,514 genes. The cells in the dataset come from three different cell types, zygote, two-cell embryos and four-cell embryos. While the cells in this dataset are all from a single condition we have dveloped an approach to split the data into two conditions so that we can test the linking of clusters across conditions where we know the absolute truth about which clusters are present in each condition (please see the original manuscript for more details). For this dataset we put the zygote cells and half of the two-cell cells into condition 1 and the remaining two-cell cells and the four-cell cells are put into condition 2.</p>
 </div>
 <div id="splitting-the-data" class="section level3">
 <h3>Splitting the data</h3>
@@ -217,27 +217,27 @@ centers_2 &lt;-<span class="st"> </span>sdc_res$centers2  <span class="co"># Cen
 <p>The results can then be seen as:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(<span class="kw">as.factor</span>(clusters_1))</code></pre></div>
 <pre><code>##  1  2 
-##  9 10</code></pre>
+## 10  9</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(<span class="kw">as.factor</span>(clusters_2))</code></pre></div>
-<pre><code>##  2  3 
+<pre><code>##  1  3 
 ## 10 20</code></pre>
 <p>We can then visualize the accuracy of the clustering by comparing the clusters to the true cell types:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">table</span>(cell_type_biase[<span class="kw">which</span>(condition_biase ==<span class="st"> &quot;A&quot;</span>)], clusters_1)</code></pre></div>
 <pre><code>##                  clusters_1
 ##                    1  2
-##   Two-cell Embryo  0 10
-##   Zygote           9  0</code></pre>
+##   Two-cell Embryo 10  0
+##   Zygote           0  9</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">table</span>(cell_type_biase[<span class="kw">which</span>(condition_biase ==<span class="st"> &quot;B&quot;</span>)], clusters_2)</code></pre></div>
 <pre><code>##                   clusters_2
-##                     2  3
+##                     1  3
 ##   Four-cell Embryo  0 20
 ##   Two-cell Embryo  10  0</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">table</span>(<span class="kw">c</span>(cell_type_biase),<span class="kw">c</span>(clusters_1,clusters_2))</code></pre></div>
 <pre><code>##                   
 ##                     1  2  3
 ##   Four-cell Embryo  0  0 20
-##   Two-cell Embryo   0 20  0
-##   Zygote            9  0  0</code></pre>
+##   Two-cell Embryo  20  0  0
+##   Zygote            0  9  0</code></pre>
 <p>Here see that each of the cells was clustered to the correct cell type, with the zygote cells making up cluster 1, the two-cell cells making up cluster 2 and the four-cell cells making up cluster 3.</p>
 </div>
 <div id="marker-genes" class="section level3">
@@ -246,24 +246,24 @@ centers_2 &lt;-<span class="st"> </span>sdc_res$centers2  <span class="co"># Cen
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">zygote_top_10_index &lt;-<span class="st"> </span><span class="kw">which</span>(centers_1[,<span class="dv">1</span>] &gt;=<span class="st"> </span><span class="kw">tail</span>(<span class="kw">sort</span>(centers_1[,<span class="dv">1</span>]),<span class="dv">10</span>)[<span class="dv">1</span>])
 zygote_top_10 &lt;-<span class="st"> </span>gene_names_biase[zygote_top_10_index]
 zygote_top_10</code></pre></div>
-<pre><code>##  [1] &quot;ENSMUSG00000022803&quot; &quot;ENSMUSG00000024154&quot; &quot;ENSMUSG00000050234&quot;
-##  [4] &quot;ENSMUSG00000052485&quot; &quot;ENSMUSG00000075045&quot; &quot;ENSMUSG00000076617&quot;
-##  [7] &quot;ENSMUSG00000079112&quot; &quot;ENSMUSG00000086021&quot; &quot;ENSMUSG00000086399&quot;
-## [10] &quot;ENSMUSG00000088476&quot;</code></pre>
+<pre><code>##  [1] &quot;ENSMUSG00000052025&quot; &quot;ENSMUSG00000066772&quot; &quot;ENSMUSG00000070902&quot;
+##  [4] &quot;ENSMUSG00000077323&quot; &quot;ENSMUSG00000085300&quot; &quot;ENSMUSG00000085878&quot;
+##  [7] &quot;ENSMUSG00000093421&quot; &quot;ENSMUSG00000094311&quot; &quot;ENSMUSG00000096323&quot;
+## [10] &quot;ENSMUSG00000097581&quot;</code></pre>
 <p>To view the center values for each of the top-10 genes we can run:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">zyg_t10_res &lt;-<span class="st"> </span><span class="kw">cbind</span>(zygote_top_10, centers_1[zygote_top_10_index])
 zyg_t10_res</code></pre></div>
 <pre><code>##       zygote_top_10                           
-##  [1,] &quot;ENSMUSG00000022803&quot; &quot;0.49355486691531&quot; 
-##  [2,] &quot;ENSMUSG00000024154&quot; &quot;0.474387660828567&quot;
-##  [3,] &quot;ENSMUSG00000050234&quot; &quot;0.519741901453698&quot;
-##  [4,] &quot;ENSMUSG00000052485&quot; &quot;0.561646641488859&quot;
-##  [5,] &quot;ENSMUSG00000075045&quot; &quot;0.566416311747879&quot;
-##  [6,] &quot;ENSMUSG00000076617&quot; &quot;0.484301691861589&quot;
-##  [7,] &quot;ENSMUSG00000079112&quot; &quot;0.513702143858169&quot;
-##  [8,] &quot;ENSMUSG00000086021&quot; &quot;0.470055838839544&quot;
-##  [9,] &quot;ENSMUSG00000086399&quot; &quot;0.471396342931961&quot;
-## [10,] &quot;ENSMUSG00000088476&quot; &quot;0.4838040813855&quot;</code></pre>
+##  [1,] &quot;ENSMUSG00000052025&quot; &quot;0.201965797408379&quot;
+##  [2,] &quot;ENSMUSG00000066772&quot; &quot;0.119501826323416&quot;
+##  [3,] &quot;ENSMUSG00000070902&quot; &quot;0.256025868166965&quot;
+##  [4,] &quot;ENSMUSG00000077323&quot; &quot;0.155854111989898&quot;
+##  [5,] &quot;ENSMUSG00000085300&quot; &quot;0.379620177183942&quot;
+##  [6,] &quot;ENSMUSG00000085878&quot; &quot;0.203907133058937&quot;
+##  [7,] &quot;ENSMUSG00000093421&quot; &quot;0.117789180618744&quot;
+##  [8,] &quot;ENSMUSG00000094311&quot; &quot;0.257121704113758&quot;
+##  [9,] &quot;ENSMUSG00000096323&quot; &quot;0.100485080920773&quot;
+## [10,] &quot;ENSMUSG00000097581&quot; &quot;0.118753326400717&quot;</code></pre>
 </div>
 <div id="condition-specific-and-condition-dependent-marker-genes" class="section level3">
 <h3>Condition-Specific and Condition-Dependent Marker Genes</h3>
@@ -274,11 +274,27 @@ diff_gene_index_2cell</code></pre></div>
 <pre><code>## integer(0)</code></pre>
 <p>However, for this dataset as the cells in both conditions are the same SparseDC correctly did not detect any genes as condtion-specific or condition-dependent.</p>
 </div>
+<div id="estimating-the-number-of-clusters-in-the-data-via-the-gap-statistic" class="section level3">
+<h3>Estimating the Number of Clusters in the Data via the Gap Statistic</h3>
+<p>One of the more succesful methods for estimating the number of clusters present in supervised clustering analysis is the gap statistic <span class="citation">(Tibshirani, Walther, and Hastie 2001)</span>. To aid users who may not know the number of clusters in their data prior to analysis we have included an implementation of the gap statistic for SparseDC in the R-package. Please see the original paper for full details on the method.</p>
+<p>Users should beware that the gap statistic function can take some time to run especially if using a large cluster range, a high number of bootstrap samples or a high dimensional dataset. Please uncomment the code below if you would like to run it. Here “min_clus” is the minimum number of clusters to try while “max_clus” is the maximum. “nboots” controls the number of bootstrap samples used, with a default value of 200.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#gap_stat &lt;- sparsedc_gap(pdata_A, pdata_B,</span>
+<span class="co">#                                 min_clus = 2, max_clus=4,</span>
+<span class="co">#                                 nboots = 200, nitter = 20, nstarts = 10)</span>
+<span class="co">#plot(gap_stat$gap_stat, xlab = &quot;Cluster Number&quot;, ylab = &quot;Gap Statistic&quot;,</span>
+<span class="co">#     main = &quot;Gap Statistic Plot&quot;)</span>
+<span class="co">#arrows(1:length(gap_stat$gap_stat),gap_stat$gap_stat-gap_stat$gap_se,</span>
+<span class="co">#       1:length(gap_stat$gap_stat),gap_stat$gap_stat+gap_stat$gap_se, </span>
+<span class="co">#       code=3, length=0.02, angle = 90)</span></code></pre></div>
+</div>
 <div id="references" class="section level3 unnumbered">
 <h3>References</h3>
 <div id="refs" class="references">
 <div id="ref-biase2014">
 <p>Biase, Fernando H., Xiaoyi Cao, and Sheng Zhong. 2014. “Cell Fate Inclination Within 2-Cell and 4-Cell Mouse Embryos Revealed by Single-Cell RNA Sequencing.” <em>Genome Research</em> 11 (4). Genome Research: 1787–96. doi:<a href="https://doi.org/10.1101/gr.177725.114">10.1101/gr.177725.114</a>.</p>
+</div>
+<div id="ref-tibs2001">
+<p>Tibshirani, Robert, Guenther Walther, and Trevor Hastie. 2001. “Estimating the Number of Clusters in a Data Set via the Gap Statistic.” <em>Journal of the Royal Statistical Society: Series B (Statistical Methodology)</em> 63 (2). Blackwell Publishers Ltd.: 411–23. doi:<a href="https://doi.org/10.1111/1467-9868.00293">10.1111/1467-9868.00293</a>.</p>
 </div>
 </div>
 </div>

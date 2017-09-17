@@ -1,7 +1,7 @@
 Package: SparseDC
 Type: Package
 Title: Implementation of SparseDC Algorithm
-Version: 0.1.5
+Version: 0.1.12
 Authors@R: c(
     person("Jun", "Li", email = "jun.li@nd.edu",role = c("aut","cre")),
     person("Martin", "Barron", email = "mbarron2@nd.edu",role = c("aut")))
@@ -23,9 +23,9 @@ Suggests: knitr, rmarkdown
 VignetteBuilder: knitr
 Imports: stats
 NeedsCompilation: no
-Packaged: 2017-05-02 06:32:54 UTC; Administrator
+Packaged: 2017-09-17 15:58:36 UTC; Administrator
 Author: Jun Li [aut, cre],
   Martin Barron [aut]
 Maintainer: Jun Li <jun.li@nd.edu>
 Repository: CRAN
-Date/Publication: 2017-05-02 10:50:17 UTC
+Date/Publication: 2017-09-17 16:16:33 UTC
