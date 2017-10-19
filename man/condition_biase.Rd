@@ -4,7 +4,7 @@
 \name{condition_biase}
 \alias{condition_biase}
 \title{Biase Data Conditions}
-\format{An R.Data object containg a vector with the conditon of the 49 cells
+\format{An R.Data object containing a vector with the conditon of the 49 cells
 in the Biase data.}
 \usage{
 condition_biase

@@ -20,7 +20,7 @@ as in pdat1.}
 
 \item{max_clus}{The maximum number of clusters to try.}
 
-\item{nboots}{The number of bootstrap repitions to use, default = 200.}
+\item{nboots}{The number of bootstrap repetitions to use, default = 200.}
 
 \item{nitter}{The max number of iterations for each of the start values, the
 default value is 20.}
@@ -28,18 +28,18 @@ default value is 20.}
 \item{nstarts}{The number of start values to use for SparseDC. The default
 value is 10.}
 
-\item{l1_boot}{The number of bootstrap repitions used for estimating
+\item{l1_boot}{The number of bootstrap repetitions used for estimating
 lambda 1.}
 
-\item{l2_boot}{The number of bootstrap repitions used for estimating
+\item{l2_boot}{The number of bootstrap repetitions used for estimating
 lambda 2.}
 }
 \value{
-A list containing the optimal number of clusters, aswell as gap
-statistics and the calcualted standard error for each number of clusters.
+A list containing the optimal number of clusters, as well as gap
+statistics and the calculated standard error for each number of clusters.
 }
 \description{
-This function calcualtes the gap statistic for SparseDC. For use
+This function calculates the gap statistic for SparseDC. For use
 when the number of clusters in the data is unknown. We recommend
 using alternate methods to infer the number of clusters in the
 data.

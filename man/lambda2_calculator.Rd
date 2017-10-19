@@ -21,12 +21,12 @@ as in pdat1.}
 range is (0,1). The default value is 0.5, the median of the calculated
 lambda 2 values.}
 
-\item{nboot2}{The number of bootstrap repitions for eatimating lambda 2,
+\item{nboot2}{The number of bootstrap repetitions for estimating lambda 2,
 the default value is 1000.}
 }
 \value{
 The calculated value of lambda 2 to use in the main SparseDC
-algortihm.
+algorithm.
 }
 \description{
 Calculates the lambda 2 values for use in the main SparseDC algorithm, the

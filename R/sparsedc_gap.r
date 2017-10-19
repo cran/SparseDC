@@ -1,6 +1,6 @@
 #' Gap Statistic Calculator
 #'
-#' This function calcualtes the gap statistic for SparseDC. For use
+#' This function calculates the gap statistic for SparseDC. For use
 #' when the number of clusters in the data is unknown. We recommend
 #' using alternate methods to infer the number of clusters in the
 #' data.
@@ -13,17 +13,17 @@
 #' as in pdat1.
 #' @param min_clus The minimum number of clusters to try, minimum value is 2.
 #' @param max_clus The maximum number of clusters to try.
-#' @param nboots The number of bootstrap repitions to use, default = 200.
+#' @param nboots The number of bootstrap repetitions to use, default = 200.
 #' @param nitter The max number of iterations for each of the start values, the
 #' default value is 20.
 #' @param nstarts The number of start values to use for SparseDC. The default
 #' value is 10.
-#' @param l1_boot The number of bootstrap repitions used for estimating
+#' @param l1_boot The number of bootstrap repetitions used for estimating
 #' lambda 1.
-#' @param l2_boot The number of bootstrap repitions used for estimating
+#' @param l2_boot The number of bootstrap repetitions used for estimating
 #' lambda 2.
-#' @return A list containing the optimal number of clusters, aswell as gap
-#' statistics and the calcualted standard error for each number of clusters.
+#' @return A list containing the optimal number of clusters, as well as gap
+#' statistics and the calculated standard error for each number of clusters.
 #' @examples
 #' # load a small dataset
 #' data_test <- data_biase[1:50,]
@@ -119,10 +119,10 @@ sparsedc_gap <- function(pdat1, pdat2, min_clus, max_clus,
 #'
 #' Uniform data generator
 #' For use with the gap statistic. Generates datasets drawn from the reference
-#' distribution where each reference feature is generates uniformly over the
+#' distribution where each reference feature is generated uniformly over the
 #' range of observed values for that feature.
 #'
-#' @param data A dataset with rows as features and columns as samples
+#' @param data A dataset with rows as features and columns as samples.
 #' @return A dataset drawn from the reference distribution for use internally
 #' with the gap statistic.
 #'

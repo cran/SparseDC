@@ -1,6 +1,6 @@
 #' Sparse Differential Clustering
 #'
-#' The main SparseDC function. This function clustered the samples from the two
+#' The main SparseDC function. This function clusters the samples from the two
 #' conditions and links the clusters across the conditions. It also identifies
 #' marker genes for each of the clusters. There are three types of marker gene
 #' which SparseDC identifies. Please see the original manuscript for further
@@ -14,15 +14,18 @@
 #' @param ncluster The number of clusters present in the data.
 #' @param lambda1 The lambda 1 value to use in the SparseDC function. This
 #' value controls the number of marker genes detected for each of the clusters
-#' in the final result. This can be calcualted using the "l1_calculator"
+#' in the final result. This can be calculated using the "lambda1_calculator"
 #' function or supplied by the user.
 #' @param lambda2 The lambda 2 value to use in the SparseDC function. This
 #' value controls the number of genes that show condition-dependent
-#' expression within each cell type.
+#' expression within each cell type. This can be calculated using the
+#' "lambda2_calculator" function or supplied by the user.
 #' @param nitter The max number of iterations for each of the start values, the
 #' default value is 20.
 #' @param nstarts The number of start values to use for SparseDC. The default
 #' value is 50.
+#' @param init_iter The number of iterations used to generate the starting
+#' center values.
 #' @return A list containing the clustering solution, cluster centers  and the
 #' score of each of the starts.
 #' @examples
@@ -78,17 +81,26 @@
 #' @seealso  \code{\link{lambda1_calculator}}  \code{\link{lambda2_calculator}}
 #' \code{\link{update_c}} \code{\link{update_mu}}
 sparsedc_cluster <- function(pdat1, pdat2, ncluster, lambda1, lambda2,
-                             nitter = 20, nstarts = 50) {
+                             nitter = 20, nstarts = 50, init_iter = 5) {
   clusterHistory1star <- clusterHistory2star <- vector(nitter, mode="list")  # Create best cluster assignment history list
   centerHistory1star <- centerHistory2star <- vector(nitter, mode="list")  # Create best center history list
   iter_star <- NA
   score_vec <- rep(NA, nstarts)  # Create vector to contain scores for each of the starts
-  for( s in 1:nstarts) {  # For each start
+  c_dat <- cbind(pdat1, pdat2) # Create pooled data
+  center_starts <- vector(nstarts, mode="list")
+  for(s in 1:nstarts){
+    center_starts[[s]] <- t(stats::kmeans(t(c_dat), centers = ncluster, nstart=1,
+                                          iter.max = init_iter)$centers)
+  }
+  center_start <- center_starts[!duplicated(center_starts)]
+  nstarts_r <- length(center_start)
+  cat("The number of unique start values is: ", nstarts_r, fill=TRUE)
+
+  score_vec <- rep(NA, nstarts_r)  # Create vector to contain scores for each of the starts
+  for( s in 1:nstarts_r) {  # For each start
     clusterHistory1 <- clusterHistory2 <- vector(nitter, mode="list")  # Create cluster assignment history list
     centerHistory1 <- centerHistory2 <- vector(nitter, mode="list")  # Create center history list
-    c_dat <- cbind(pdat1, pdat2)
-    fit_temp <- stats::kmeans(t(c_dat), ncluster, nstart=1)
-    mu_1 <- mu_2 <- t(fit_temp$centers)
+    mu_1 <- mu_2 <- center_start[[s]]
     centers <- list(mu_1=mu_1,mu_2=mu_2)  # Convert centers to list form
     iter_num <- 0
     clus_same <- FALSE

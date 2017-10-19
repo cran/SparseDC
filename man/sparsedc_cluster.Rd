@@ -5,7 +5,7 @@
 \title{Sparse Differential Clustering}
 \usage{
 sparsedc_cluster(pdat1, pdat2, ncluster, lambda1, lambda2, nitter = 20,
-  nstarts = 50)
+  nstarts = 50, init_iter = 5)
 }
 \arguments{
 \item{pdat1}{The centered data from condition 1, columns should be
@@ -20,25 +20,29 @@ as in pdat1.}
 
 \item{lambda1}{The lambda 1 value to use in the SparseDC function. This
 value controls the number of marker genes detected for each of the clusters
-in the final result. This can be calcualted using the "l1_calculator"
+in the final result. This can be calculated using the "lambda1_calculator"
 function or supplied by the user.}
 
 \item{lambda2}{The lambda 2 value to use in the SparseDC function. This
 value controls the number of genes that show condition-dependent
-expression within each cell type.}
+expression within each cell type. This can be calculated using the
+"lambda2_calculator" function or supplied by the user.}
 
 \item{nitter}{The max number of iterations for each of the start values, the
 default value is 20.}
 
 \item{nstarts}{The number of start values to use for SparseDC. The default
 value is 50.}
+
+\item{init_iter}{The number of iterations used to generate the starting
+center values.}
 }
 \value{
 A list containing the clustering solution, cluster centers  and the
 score of each of the starts.
 }
 \description{
-The main SparseDC function. This function clustered the samples from the two
+The main SparseDC function. This function clusters the samples from the two
 conditions and links the clusters across the conditions. It also identifies
 marker genes for each of the clusters. There are three types of marker gene
 which SparseDC identifies. Please see the original manuscript for further

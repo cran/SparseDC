@@ -13,13 +13,13 @@
 #' should be the same as \code{pdat1}.
 #' as in pdat1.
 #' @param ncluster The number of clusters present in the data.
-#' @param nboot1 The number of bootstrap repitions used for estimating lambda 1,
+#' @param nboot1 The number of bootstrap repetitions used for estimating lambda 1,
 #' the default value is 1000.
 #' @param alpha1 The quantile of the bootstrapped lambda 1 values to use,
 #' range is (0,1). The default value is 0.5, the median of the calculated
 #' lambda 1 values.
 #' @return The calculated value of lambda 1 to use in the main SparseDC
-#' algortihm.
+#' algorithm.
 #' @examples
 #' set.seed(10)
 #' # Select small dataset for example

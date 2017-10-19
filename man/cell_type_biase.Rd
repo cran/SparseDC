@@ -4,7 +4,7 @@
 \name{cell_type_biase}
 \alias{cell_type_biase}
 \title{Biase Data Cell Type}
-\format{An R.Data object containg a vector with the cell type of each of the
+\format{An R.Data object containing a vector with the cell type of each of the
 cells in the Biase Data.}
 \usage{
 cell_type_biase

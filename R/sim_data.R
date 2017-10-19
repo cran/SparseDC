@@ -1,7 +1,7 @@
 #' Data Simulator
 #'
 #' Simulates two condition data for a range of conditions depending on the
-#' paramters used.
+#' parameters used.
 #'
 #' @param genes The number of genes to be simulated.
 #' @param cells The number of cells to be simulated per condition.
@@ -28,7 +28,7 @@
 #' @examples
 #' set.seed(10)
 #' genes <- 1000  # Simulate 1,000 genes
-#' cells <- 100  # Simualte 100 cells per condition
+#' cells <- 100  # Simulate 100 cells per condition
 #' clus.t1 <- c(1,2,3)  # Generate 3 clusters present in condition A
 #' clus.t2 <- c(1,2,3)  # Generate 3 clusters present in condition B
 #' sig.genes <- 30  # Generate 30 marker genes per cluster

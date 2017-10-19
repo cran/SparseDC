@@ -15,7 +15,7 @@
 #' The condition for each sample in the Biase data. To be used when splitting
 #' the data to demonstrate SparseDC.
 #'
-#'@format An R.Data object containg a vector with the conditon of the 49 cells
+#'@format An R.Data object containing a vector with the conditon of the 49 cells
 #'in the Biase data.
 "condition_biase"
 
@@ -23,7 +23,7 @@
 #'
 #' The cell type of each of the cells in the Biase data.
 #'
-#' @format An R.Data object containg a vector with the cell type of each of the
+#' @format An R.Data object containing a vector with the cell type of each of the
 #' cells in the Biase Data.
 #'
 "cell_type_biase"

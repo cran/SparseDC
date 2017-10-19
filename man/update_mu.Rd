@@ -23,12 +23,13 @@ as in pdat1.}
 
 \item{lambda1}{The lambda 1 value to use in the SparseDC function. This
 value controls the number of marker genes detected for each of the clusters
-in the final result. This can be calcualted using the "l1_calculator"
+in the final result. This can be calculated using the "lambda1_calculator"
 function or supplied by the user.}
 
 \item{lambda2}{The lambda 2 value to use in the SparseDC function. This
 value controls the number of genes that show condition-dependent
-expression within each cell type.}
+expression within each cell type. This can be calculated using the
+"lambda2_calculator" function or supplied by the user.}
 }
 \value{
 Returns a list containing the center values for each of the
