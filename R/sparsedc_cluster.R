@@ -89,8 +89,10 @@ sparsedc_cluster <- function(pdat1, pdat2, ncluster, lambda1, lambda2,
   c_dat <- cbind(pdat1, pdat2) # Create pooled data
   center_starts <- vector(nstarts, mode="list")
   for(s in 1:nstarts){
-    center_starts[[s]] <- t(stats::kmeans(t(c_dat), centers = ncluster, nstart=1,
-                                          iter.max = init_iter)$centers)
+    center_starts[[s]] <- suppressWarnings(t(stats::kmeans(t(c_dat),
+                                                           centers = ncluster,
+                                                           nstart=1,
+                                          iter.max = init_iter)$centers))
   }
   center_start <- center_starts[!duplicated(center_starts)]
   nstarts_r <- length(center_start)

@@ -1,4 +1,4 @@
-737b8d54ea9382214ec8320e00cbe8c2 *DESCRIPTION
+4f78ed1be89f09fdb3d219e0cf2cbeeb *DESCRIPTION
 29de112763a57188a9c1aeecc1bf5b93 *NAMESPACE
 1c436e22f8f460d4da0566729370c9cc *R/S_func.R
 f188135ccb3f508889490bdba3f42206 *R/data_biase.R
@@ -6,18 +6,18 @@ e97c91ba379a049b0af95e64e78bacb9 *R/lambda1_calculator.R
 40887f60b9f028366b6d59703d6d2afb *R/lambda2_calcualtor.R
 c23a764905318ce7bc9b83ba61dc9c5b *R/pre_proc_data.R
 0723c5154c9e517078dcb2f6fc8891a6 *R/sim_data.R
-32e4823983c621158f7d06435de6739a *R/sparsedc_cluster.R
+2fe9ebcce7c254f1e2e9fe545bb41c73 *R/sparsedc_cluster.R
 34542537e4f47236a87d7e8af3e82e14 *R/sparsedc_gap.r
 44048d9a3ed3a5948973a9401f1c4e03 *R/update_c.R
 71a354dcafbda34e4cc23f5476ed3aa7 *R/update_mu.R
-f0d518b74558247901e4f44aff483ccd *build/vignette.rds
+432e1b8f2fe8f96793402927569eabee *build/vignette.rds
 fa5111db2c43fd5d0f30a97830087f18 *data/cell_type_biase.rda
 e8c852a9722c83f71149d852712e1440 *data/condition_biase.rda
 184b39afc36d3396b7a4d2f9e0a74dc4 *data/data_biase.rda
 2d32b4b4dc0f012485ff72b9fc207c11 *data/datalist
 45bfa185acc142fe9040951481b2059c *inst/doc/SparseDC.R
 a57490f2dce95f7e4848ecff231bcbda *inst/doc/SparseDC.Rmd
-652eb9034cb7cd8c0fd56ebbdd8cb625 *inst/doc/SparseDC.html
+2c819785a65bc5e06294ed55136f67f3 *inst/doc/SparseDC.html
 a589bc7e49ce712c7e2f41741e45f0f5 *man/S_func.Rd
 cf0df51b2ff89066b424aec5671210b3 *man/cell_type_biase.Rd
 78937f997f0e59382d55293d3ee28e2e *man/condition_biase.Rd
